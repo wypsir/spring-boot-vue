@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +32,11 @@ public class UserController {
 
     @ApiOperation(value = "创建用户", notes = "根据user对象创建用户")
     @ApiImplicitParam(name = "user", value = "用户详细实体user", required = true, dataType = "User")
-    @RequestMapping(method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Result createUser(@Validated  User user, BindingResult result) {
-        if (result.hasErrors()) {
-            return Result.failure();
-        }
+    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Result createUser(@Validated User user) throws Exception {
+//        if (result.hasErrors()) {
+//            return Result.failure();
+//        }
         users.put(user.getId(), user);
         return Result.success();
     }

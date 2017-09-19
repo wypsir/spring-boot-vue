@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @SpringBootApplication
-@MapperScan("com.wyp.dao.mapper*")
+//@MapperScan("com.wyp.dao.mapper*")
 @ComponentScan("com.wyp")
 public class SpringBootVueApplication
         implements CommandLineRunner
