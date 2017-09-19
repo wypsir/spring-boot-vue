@@ -2,17 +2,26 @@ package com.wyp.webserver;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.wyp.common.util.SpringUtils;
-import com.wyp.webserver.web.CrawlerUtil;
 import com.wyp.common.entity.BeautifulPictures;
 import com.wyp.common.entity.Picture;
+import com.wyp.common.util.Log;
+import com.wyp.common.util.SpringUtils;
+import com.wyp.webserver.web.CrawlerUtil;
 import com.wyp.webserver.web.service.IBeautifulPicturesService;
 import com.wyp.webserver.web.service.IPictureService;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -22,10 +31,12 @@ import java.util.Map;
 @MapperScan("com.wyp.dao.mapper*")
 @ComponentScan("com.wyp")
 public class SpringBootVueApplication
-//        implements CommandLineRunner
+        implements CommandLineRunner
 {
 
 
+    //资源下载之后，保存在本地的文件路径
+    private static String downloadFilePath = "D://downloadImage//";
 
 
     public static void main(String[] args) {
@@ -36,7 +47,7 @@ public class SpringBootVueApplication
 
     //springboot运行后此方法首先被调用
     //实现CommandLineRunner抽象类中的run方法
-//    @Override
+    @Override
     public void run(String... args) throws Exception {
         //返回值
         int result = 1;
@@ -87,6 +98,8 @@ public class SpringBootVueApplication
                     for(Picture picture : listPicture){
                         //入库
                         pictureService.insert(picture);
+
+                        downImages(downloadFilePath,picture.getUrl());
                     }
                 }else{
                     System.out.println(homeUrl+beautifulPictures.getUrl()+"页面数据已经爬过了！！");
@@ -97,5 +110,56 @@ public class SpringBootVueApplication
             result = 0;
         }
         return result;
+    }
+
+
+    /**
+     *
+     * 根据图片的外网地址下载图片到本地硬盘的filePath
+     * @param filePath 本地保存图片的文件路径
+     * @param imgUrl 图片的外网地址
+     * @throws UnsupportedEncodingException
+     *
+     */
+    public static void downImages(String filePath,String imgUrl)  {
+
+        try {
+        //图片url中的前面部分：例如"http://images.csdn.net/"
+        String beforeUrl = imgUrl.substring(0,imgUrl.lastIndexOf("/")+1);
+        //图片url中的后面部分：例如“20150529/PP6A7429_副本1.jpg”
+        String fileName = imgUrl.substring(imgUrl.lastIndexOf("/")+1);
+        //编码之后的fileName，空格会变成字符"+"
+        String newFileName = URLEncoder.encode(fileName, "UTF-8");
+        //把编码之后的fileName中的字符"+"，替换为UTF-8中的空格表示："%20"
+        newFileName = newFileName.replaceAll("\\+", "\\%20");
+        //编码之后的url
+        imgUrl = beforeUrl + newFileName;
+
+
+            //创建文件目录
+            File files = new File(filePath);
+            if (!files.exists()) {
+                files.mkdirs();
+            }
+            //获取下载地址
+            URL url = new URL(imgUrl);
+            //链接网络地址
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            //获取链接的输出流
+            InputStream is = connection.getInputStream();
+            //创建文件，fileName为编码之前的文件名
+            File file = new File(filePath + fileName);
+            //根据输入流写入文件
+            FileOutputStream out = new FileOutputStream(file);
+            int i = 0;
+            while((i = is.read()) != -1){
+                out.write(i);
+            }
+            out.close();
+            is.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.error("downloadImage error");
+        }
     }
 }
