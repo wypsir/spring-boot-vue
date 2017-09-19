@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
+import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -27,6 +29,7 @@ import javax.sql.DataSource;
  * @description
  */
 @Configuration
+@MapperScan("com.wyp.dao.mapper*")
 public class MybatisPlusConfig {
 
 
@@ -44,6 +47,9 @@ public class MybatisPlusConfig {
 
     @Autowired(required = false)
     private DatabaseIdProvider databaseIdProvider;
+
+    @Autowired
+    private RedisCacheManager redisCacheManager;
 
     @Bean
     public PaginationInterceptor paginationInterceptor() {
