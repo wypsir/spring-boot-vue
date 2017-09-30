@@ -8,10 +8,13 @@ import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -31,10 +34,6 @@ import javax.sql.DataSource;
 @Configuration
 @MapperScan("com.wyp.dao.mapper*")
 public class MybatisPlusConfig {
-
-
-    @Autowired
-    private DataSource dataSource;
 
     @Autowired
     private MybatisProperties properties;
@@ -64,39 +63,48 @@ public class MybatisPlusConfig {
      * @return
      */
     @Bean
-    public MybatisSqlSessionFactoryBean mybatisSqlSessionFactoryBean() {
-        MybatisSqlSessionFactoryBean mybatisPlus = new MybatisSqlSessionFactoryBean();
-        mybatisPlus.setDataSource(dataSource);
-        mybatisPlus.setVfs(SpringBootVFS.class);
+    @ConditionalOnMissingBean
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
+        MybatisSqlSessionFactoryBean factory = new MybatisSqlSessionFactoryBean();
+        factory.setDataSource(dataSource);
+        factory.setVfs(SpringBootVFS.class);
         if (StringUtils.hasText(this.properties.getConfigLocation())) {
-            mybatisPlus.setConfigLocation(this.resourceLoader.getResource(this.properties.getConfigLocation()));
+            factory.setConfigLocation(this.resourceLoader.getResource(this.properties.getConfigLocation()));
         }
-        mybatisPlus.setConfiguration(properties.getConfiguration());
-        if (!ObjectUtils.isEmpty(this.interceptors)) {
-            mybatisPlus.setPlugins(this.interceptors);
+        MybatisConfiguration configuration = (MybatisConfiguration) this.properties.getConfiguration();
+        if (configuration == null && !StringUtils.hasText(this.properties.getConfigLocation())) {
+            configuration = new MybatisConfiguration();
         }
+        configuration.setDefaultScriptingLanguage(MybatisXMLLanguageDriver.class);
+        factory.setConfiguration(configuration);
         // MP 全局配置，更多内容进入类看注释
         GlobalConfiguration globalConfig = new GlobalConfiguration();
         globalConfig.setDbType(DBType.MYSQL.name());
         // ID 策略 AUTO->`0`("数据库ID自增") INPUT->`1`(用户输入ID") ID_WORKER->`2`("全局唯一ID") UUID->`3`("全局唯一ID")
         globalConfig.setIdType(3);
-        mybatisPlus.setGlobalConfig(globalConfig);
+        factory.setGlobalConfig(globalConfig);
         MybatisConfiguration mc = new MybatisConfiguration();
         mc.setDefaultScriptingLanguage(MybatisXMLLanguageDriver.class);
-        mybatisPlus.setConfiguration(mc);
+        factory.setConfiguration(mc);
+        if (this.properties.getConfigurationProperties() != null) {
+            factory.setConfigurationProperties(this.properties.getConfigurationProperties());
+        }
+        if (!ObjectUtils.isEmpty(this.interceptors)) {
+            factory.setPlugins(this.interceptors);
+        }
         if (this.databaseIdProvider != null) {
-            mybatisPlus.setDatabaseIdProvider(this.databaseIdProvider);
+            factory.setDatabaseIdProvider(this.databaseIdProvider);
         }
         if (StringUtils.hasLength(this.properties.getTypeAliasesPackage())) {
-            mybatisPlus.setTypeAliasesPackage(this.properties.getTypeAliasesPackage());
+            factory.setTypeAliasesPackage(this.properties.getTypeAliasesPackage());
         }
         if (StringUtils.hasLength(this.properties.getTypeHandlersPackage())) {
-            mybatisPlus.setTypeHandlersPackage(this.properties.getTypeHandlersPackage());
+            factory.setTypeHandlersPackage(this.properties.getTypeHandlersPackage());
         }
         if (!ObjectUtils.isEmpty(this.properties.resolveMapperLocations())) {
-            mybatisPlus.setMapperLocations(this.properties.resolveMapperLocations());
+            factory.setMapperLocations(this.properties.resolveMapperLocations());
         }
-        return mybatisPlus;
+        return factory.getObject();
     }
 
 

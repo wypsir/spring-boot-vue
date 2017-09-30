@@ -1,6 +1,8 @@
 package com.wyp.common.entity;
 
 import com.wyp.common.annotation.CheckPassword;
+import com.wyp.common.annotation.PhoneNo;
+import com.wyp.common.valid.Valid;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -18,28 +20,19 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     private Long id;
-    @NotBlank
+    @NotBlank(groups = {Valid.Login.class, Valid.Register.class})
     private String username;
-    @NotBlank
+    @NotBlank(groups = {Valid.Login.class, Valid.Register.class})
     private String password;
-    @NotBlank
+    @NotBlank(groups = {Valid.Register.class})
     private String confirmPassword;
-    @Email
+    @Email(groups = {Valid.Register.class})
     private String email;
 
+    @NotBlank(groups = {Valid.Register.class})
+    @PhoneNo(groups = {Valid.Register.class})
     private String phone;
     @Min(3)
     private int age;
 
-    private interface Add {
-    }
-
-    private interface Delete {
-    }
-
-    private interface Update {
-    }
-
-    private interface Query {
-    }
 }

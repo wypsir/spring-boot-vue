@@ -1,4 +1,4 @@
-package com.wyp.webserver.web.controller;
+package com.wyp.webserver.web.controller.restApi;
 
 import com.wyp.common.entity.Result;
 import com.wyp.common.util.ErrorUtil;

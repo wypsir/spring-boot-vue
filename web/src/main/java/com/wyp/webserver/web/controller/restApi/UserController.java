@@ -1,13 +1,16 @@
-package com.wyp.webserver.web.controller;
+package com.wyp.webserver.web.controller.restApi;
 
 import com.wyp.common.entity.Result;
 import com.wyp.common.entity.User;
+import com.wyp.common.valid.Valid;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -70,6 +73,8 @@ public class UserController {
         users.remove(id);
         return Result.success();
     }
+
+
 
 
 }

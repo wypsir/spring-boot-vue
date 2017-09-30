@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,18 +53,6 @@ public class LogAspect {
     @Before(value = "pcMethod()")
     public void controllerBefore(JoinPoint point) {
         logger.info("controllerBefore ...");
-        request.setAttribute(LOGGER_SEND_TIME, System.currentTimeMillis());
-    }
-
-    @After(value = "pcMethod()")
-    public void controllerAfter(JoinPoint point) {
-        logger.info("controllerAfter ...");
-
-    }
-
-    @Around("pcMethod()")
-    public Object around(ProceedingJoinPoint point) throws Throwable {
-        logger.info("controllerAround ...");
         HttpLog log = new HttpLog();
         String sessionId = request.getRequestedSessionId();
         String url = request.getRequestURI();
@@ -78,28 +65,39 @@ public class LogAspect {
         log.setParamData(paramData);
         log.setUri(url);
         log.setSessionId(sessionId);
+        request.setAttribute(LOGGER_SEND_TIME, System.currentTimeMillis());
+        request.setAttribute(LOGGER_ENTITY, log);
+    }
+
+    @After(value = "pcMethod()")
+    public void controllerAfter(JoinPoint point) {
+        logger.info("controllerAfter ...");
+
+    }
+
+    @Around("pcMethod()")
+    public Object around(ProceedingJoinPoint point) throws Throwable {
+        logger.info("controllerAround ...");
+        return  point.proceed();
+    }
+
+    @AfterReturning(pointcut = "pcMethod()",returning = "relVal")
+    public void AfterReturning (JoinPoint point,Object relVal) {
+        logger.info("AfterReturning ...");
         int status = response.getStatus();
 
         long time = System.currentTimeMillis();
-
-        Object returnData = "";
-        try {
-            returnData = point.proceed();
-        } catch (Throwable throwable) {
-
-        }
         long currentTime = System.currentTimeMillis();
+        HttpLog log = (HttpLog) request.getAttribute(LOGGER_ENTITY);
         log.setTimeConsuming(Integer.valueOf((currentTime - time) + ""));
         log.setReturnTime(currentTime + "");
         log.setHttpStatusCode(status + "");
-        log.setReturnData(JSON.toJSONString(returnData, SerializerFeature.DisableCircularReferenceDetect, SerializerFeature.WriteMapNullValue));
+        log.setReturnData(JSON.toJSONString(relVal, SerializerFeature.DisableCircularReferenceDetect, SerializerFeature.WriteMapNullValue));
         if (logService == null) {
             logService = SpringUtils.getBean(IHttpLogService.class);
         }
         logService.insert(log);
 
-
-        return  returnData;
 
     }
 
