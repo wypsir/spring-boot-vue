@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @description
  */
 @Data
-@CheckPassword
+@CheckPassword(groups = {Valid.Register.class})
 public class User implements Serializable {
 
     private Long id;

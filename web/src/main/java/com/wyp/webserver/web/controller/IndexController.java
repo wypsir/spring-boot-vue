@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,9 +77,15 @@ public class IndexController {
         return "register";
     }
     @RequestMapping(value = "/register",method = RequestMethod.POST)
-    public Result register(@Validated(Valid.Register.class) User user) {
+    public String register(@Validated(Valid.Register.class) User user, BindingResult result,Model model) {
 
-        return Result.success(user);
+        if (result.hasErrors()) {
+            FieldError fieldError = result.getFieldError();
+            model.addAttribute("message",fieldError.getDefaultMessage());
+            return "register";
+        }
+
+        return "login";
     }
 
 }
