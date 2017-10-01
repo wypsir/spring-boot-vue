@@ -37,10 +37,10 @@
     <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
 
-        <form action="/api/register" method="post" id="login-form">
+        <form action="/register.json" method="post" id="register-form">
             <div class="form-group has-feedback">
-                <input type="text" name="username" class="form-control" placeholder="Email"/>
-                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                <input type="text" name="username" class="form-control" placeholder="username"/>
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
                 <input type="password" name="password" class="form-control" placeholder="Password"/>
@@ -52,11 +52,11 @@
             </div>
             <div class="form-group has-feedback">
                 <input type="email" name="email" class="form-control" placeholder="email"  data-bv-field="email">
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
                 <input type="text" name="phone" class="form-control" placeholder="phone"  data-bv-field="phone">
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                <span class="glyphicon glyphicon-phone form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
                 <label id="msg" th:if="${!#strings.isEmpty(message)}" th:text="${!#strings.isEmpty(message)}?${message}:'aaaaaaaaa'" class="red"></label>
@@ -116,7 +116,7 @@
             increaseArea: '20%' // optional
         });
 
-        $("#login-form").bootstrapValidator({
+        $("#register-form").bootstrapValidator({
             message: "请输入用户名/密码",
             submitHandler: function (validator, loginForm, submitButton) {
                 validator.defaultSubmit();

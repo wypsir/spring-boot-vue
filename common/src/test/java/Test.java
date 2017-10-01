@@ -11,9 +11,10 @@ import java.net.URLConnection;
 import java.util.ArrayList;  
 import java.util.List;  
 import java.util.concurrent.ExecutorService;  
-import java.util.concurrent.Executors;  
-  
-import org.jsoup.Jsoup;  
+import java.util.concurrent.Executors;
+
+import com.wyp.common.util.FileOutUtils;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;  
 import org.jsoup.nodes.Element;  
 import org.jsoup.select.Elements;  

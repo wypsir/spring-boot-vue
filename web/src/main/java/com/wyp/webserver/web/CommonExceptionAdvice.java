@@ -53,7 +53,7 @@ public class CommonExceptionAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = NoHandlerFoundException.class)
     public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception ex) throws Exception {
-        logger.error("NoHandlerFoundException ex={}",ErrorUtil.writer(ex));
+        logger.error("NoHandlerFoundException ex={}", ErrorUtil.writer(ex));
         ModelAndView mav = new ModelAndView();
         mav.addObject("exception", ex);
         mav.addObject("url", req.getRequestURL());
@@ -150,9 +150,14 @@ public class CommonExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public Result handleException(Exception e) {
-        logger.error("通用异常", e);
-        return Result.failure("系统服务异常");
+    public ModelAndView handleException(Exception ex, HttpServletRequest req) {
+//        logger.error("通用异常", e);
+//        return Result.failure("系统服务异常");
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("exception", ex);
+        mav.addObject("url", req.getRequestURL());
+        mav.setViewName("500");
+        return mav;
     }
 
     /**

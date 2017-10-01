@@ -52,7 +52,10 @@ public class MpGenerator {
         //strategy.setTablePrefix("beautiful_");// 此处可以修改为您的表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
 //        strategy.setInclude(new String[] { "beautiful_pictures","picture","http_log" }); // 需要生成的表
-        strategy.setInclude(new String[] { "http_log" }); // 需要生成的表
+//        strategy.setInclude(new String[] { "http_log" }); // 需要生成的表
+//        strategy.setInclude(new String[] { "sys_user","sys_role",
+//                "sys_permission","sys_user_role","sys_role_permission" }); // 需要生成的表
+         strategy.setInclude(new String[]{"o_auth_user"}); // 排除生成的表
         // strategy.setExclude(new String[]{"test"}); // 排除生成的表
         // 字段名生成策略
 //        strategy.setFieldNaming(NamingStrategy.underline_to_camel);
@@ -78,7 +81,7 @@ public class MpGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.wyp.dao");
-        pc.setModuleName("com.wyp.dao.mapper");
+        pc.setModuleName("mapper");
         mpg.setPackageInfo(pc);
         // 注入自定义配置，可以在 VM 中使用 cfg.abc 设置的值
         InjectionConfig cfg = new InjectionConfig() {
