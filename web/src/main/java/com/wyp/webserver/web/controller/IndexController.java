@@ -11,10 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @aurhor wangyaping 【yapingw@dingtalk.com】
@@ -86,6 +83,18 @@ public class IndexController {
         }
 
         return "login";
+    }
+    @RequestMapping(value = "/register",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public Result register2(@Validated(Valid.Register.class) User user, BindingResult result,Model model) {
+
+        if (result.hasErrors()) {
+            FieldError fieldError = result.getFieldError();
+//            model.addAttribute("message",fieldError.getDefaultMessage());
+            return Result.failure(fieldError);
+        }
+
+        return Result.success();
     }
 
 }

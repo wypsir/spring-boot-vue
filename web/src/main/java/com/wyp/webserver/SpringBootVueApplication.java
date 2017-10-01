@@ -31,7 +31,7 @@ import java.util.Map;
 //@MapperScan("com.wyp.dao.mapper*")
 @ComponentScan("com.wyp")
 public class SpringBootVueApplication
-        implements CommandLineRunner
+//        implements CommandLineRunner
 {
 
 
@@ -47,7 +47,7 @@ public class SpringBootVueApplication
 
     //springboot运行后此方法首先被调用
     //实现CommandLineRunner抽象类中的run方法
-    @Override
+//    @Override
     public void run(String... args) throws Exception {
         //返回值
         int result = 1;

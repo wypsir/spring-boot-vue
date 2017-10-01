@@ -47,49 +47,51 @@
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="password" name="confirmPassword" class="form-control" placeholder="confirmPassword"  data-bv-field="confirmPassword">
+                <input type="password" name="confirmPassword" class="form-control" placeholder="confirmPassword"
+                       data-bv-field="confirmPassword">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="email" name="email" class="form-control" placeholder="email"  data-bv-field="email">
+                <input type="email" name="email" class="form-control" placeholder="email" data-bv-field="email">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="text" name="phone" class="form-control" placeholder="phone"  data-bv-field="phone">
+                <input type="text" name="phone" class="form-control" placeholder="phone" data-bv-field="phone">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <label id="msg" th:if="${!#strings.isEmpty(message)}" th:text="${!#strings.isEmpty(message)}?${message}:'aaaaaaaaa'" class="red"></label>
+                <label id="msg" class="red"></label>
             </div>
 
             <!--<div class="row">-->
-                <!--<div class="col-xs-8">-->
-                    <!--<div class="checkbox icheck">-->
-                        <!--<label>-->
-                            <!--<input type="checkbox"/> Remember Me-->
-                        <!--</label>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--&lt;!&ndash; /.col &ndash;&gt;-->
-                <!--<div class="col-xs-4">-->
-                    <!--<button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>-->
-                <!--</div>-->
-                <!--&lt;!&ndash; /.col &ndash;&gt;-->
+            <!--<div class="col-xs-8">-->
+            <!--<div class="checkbox icheck">-->
+            <!--<label>-->
+            <!--<input type="checkbox"/> Remember Me-->
+            <!--</label>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--&lt;!&ndash; /.col &ndash;&gt;-->
+            <!--<div class="col-xs-4">-->
+            <!--<button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>-->
+            <!--</div>-->
+            <!--&lt;!&ndash; /.col &ndash;&gt;-->
             <!--</div>-->
             <div class="social-auth-links text-center">
-                <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
+                <!--<button type="submit" id="submitBtn" class="btn btn-primary btn-block btn-flat">Register</button>-->
+                <button type="button" id="submitBtn" class="btn btn-primary btn-block btn-flat">Register</button>
             </div>
 
         </form>
 
         <!--<div class="social-auth-links text-center">-->
-            <!--<p>- OR -</p>-->
-            <!--<a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in-->
-                <!--using-->
-                <!--Facebook</a>-->
-            <!--<a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in-->
-                <!--using-->
-                <!--Google+</a>-->
+        <!--<p>- OR -</p>-->
+        <!--<a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in-->
+        <!--using-->
+        <!--Facebook</a>-->
+        <!--<a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in-->
+        <!--using-->
+        <!--Google+</a>-->
         <!--</div>-->
         <!-- /.social-auth-links -->
 
@@ -105,18 +107,19 @@
 <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="../bower_components/bootstrap-validator/bootstrapValidator.min.js"></script>
+<script src="../bower_components/bootstrap-validator/bootstrapValidator.js"></script>
 <!-- iCheck -->
 <script src="../plugins/iCheck/icheck.min.js"></script>
 <script>
     $(function () {
+        var form = $("#login-form");
         $('input').iCheck({
             checkboxClass: 'icheckbox_square-blue',
             radioClass: 'iradio_square-blue',
             increaseArea: '20%' // optional
         });
 
-        $("#login-form").bootstrapValidator({
+        form.bootstrapValidator({
             message: "请输入用户名/密码",
             submitHandler: function (validator, loginForm, submitButton) {
                 validator.defaultSubmit();
@@ -134,34 +137,87 @@
                         notEmpty: {
                             message: "密码不能为空"
                         }
+//                        ,
+//                        identical:{
+//                            field: 'confirmPassword',
+//                            message:"两次密码不一致"
+//                        }
                     }
                 },
-                confirmPassword:{
+                confirmPassword: {
                     validators: {
                         notEmpty: {
                             message: "确认密码不能为空"
+
+                        },identical:{
+                            field: 'password',
+                            message:"两次密码不一致"
                         }
                     }
                 },
-                email:{
+                email: {
                     validators: {
                         notEmpty: {
                             message: "邮箱不能为空"
-                        },email:{
-                            message:"邮箱格式不正确"
+                        }, emailAddress: {
+                            message: "邮箱格式不正确"
                         }
                     }
                 },
-                phone:{
+                phone: {
                     validators: {
                         notEmpty: {
                             message: "手机号不能为空"
+                        },aaa:{
+                            message:"手机号不合法"
                         }
                     }
                 },
             }
 
         });
+        $("#submitBtn").on('click', function () {
+            var bv = form.data("bootstrapValidator");
+            bv.validate();
+            if (bv.isValid()) {
+                console.log(form.action)
+                console.log(form.serialize());
+                $.ajax({
+                    url: '/api/register.json',
+                    async: false,
+                    type: 'post',
+//                    contentType:'application/json',
+                    data: form.serialize(),
+                    complete: function (msg) {
+                        console.log("complete .. {}", msg)
+                    },
+                    success: function (result) {
+                        console.log("sucess")
+                        console.log(result);
+
+                        switch (result.code) {
+                            case 200:
+                                window.location.href = "/api/";
+                                break;
+                            case 400:
+                                var obj = result.t;
+//                                $("small[data-bv-for="+field+"]").show().text(result.t.defaultMessage);
+                                bv.updateMessage(bv.getFieldElements(obj.field), 'notEmpty',obj.defaultMessage); //错误提示信息变了
+                                bv.updateStatus(obj.field, 'VALIDATED').validateField(obj.field); //错误提示信息变了
+
+                                break
+                            default:
+                                $("#msg").text(result.msg)
+                                break;
+
+                        }
+                    }, error: function () {
+                        console.log("error")
+                        $("#msg").text("register error")
+                    }
+                });
+            }
+        })
     });
 </script>
 </body>
