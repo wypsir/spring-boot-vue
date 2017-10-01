@@ -101,6 +101,15 @@ public class Result<T> implements Serializable {
 	public static Result failure(String message) {
 		return new Result(ERROR_CODE, message);
 	}
+	public static <W> Result<W> failure(W data) {
+		return new Result<W>(ERROR_CODE, ERROR, data);
+	}
+
+
+	public static <W> Result<W> failure(String message, W data) {
+		return new Result<W>(ERROR_CODE, message, data);
+	}
+
 
 	public static Result failure(int code, String message) {
 		return new Result(code, message);
