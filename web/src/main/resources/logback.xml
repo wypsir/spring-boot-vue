@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="true">
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <!--&lt;!&ndash;日志异步到数据库 &ndash;&gt;-->
+    <!--<appender name="DB-CLASSIC-MYSQL-POOL" class="ch.qos.logback.classic.db.DBAppender">-->
+        <!--&lt;!&ndash;日志异步到数据库 &ndash;&gt;-->
+        <!--<connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">-->
+            <!--&lt;!&ndash;连接池 &ndash;&gt;-->
+            <!--<driverClass>com.mysql.jdbc.Driver</driverClass>-->
+            <!--<url>jdbc:mysql://127.0.0.1:3306/test</url>-->
+            <!--<user>root</user>-->
+            <!--<password>root</password>-->
+        <!--</connectionSource>-->
+    <!--</appender>-->
+
+    <!--<root level="ERROR">-->
+        <!--<appender-ref ref="DB-CLASSIC-MYSQL-POOL" />-->
+    <!--</root>-->
+</configuration>
