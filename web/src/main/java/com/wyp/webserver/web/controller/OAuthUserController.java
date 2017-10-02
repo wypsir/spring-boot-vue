@@ -41,7 +41,7 @@ public class OAuthUserController {
     private ISysUserService userService;
 
     @RequestMapping(value = "/{type}/callback", method = RequestMethod.GET)
-    public String callback(@RequestParam(value = "code") String code, @PathVariable(value = "type") String type,
+    public String callback(@RequestParam(value = "code",required = false) String code, @PathVariable(value = "type") String type,
                            HttpServletRequest request, Model model) {
         OAuthServiceDeractor oAuthService = oAuthServices.getOAuthService(type);
         Token accessToken = oAuthService.getAccessToken(null, new Verifier(code));
@@ -50,6 +50,7 @@ public class OAuthUserController {
         OAuthUser oAuthUser = authUserService.selectOne(where);
         if (oAuthUser == null) {
             model.addAttribute("oAuthInfo", oAuthInfo);
+            model.addAttribute("oauth", 0);
             return "register";
         }
         request.getSession().setAttribute("oauthUser", oAuthUser);
@@ -65,7 +66,8 @@ public class OAuthUserController {
         OAuthUser oAuthInfo = new OAuthUser();
         oAuthInfo.setoAuthId(oAuthId);
         oAuthInfo.setoAuthType(oAuthType);
-        Wrapper<SysUser> where = new EntityWrapper<SysUser>().where("nickname={0}", user.getNickname());
+        String username = request.getParameter("username");
+        Wrapper<SysUser> where = new EntityWrapper<SysUser>().where("nickname={0}", username);
 
         if (userService.selectOne(where) != null) {
             model.addAttribute("errorMessage", "用户名已存在");

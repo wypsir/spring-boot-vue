@@ -12,9 +12,9 @@ import org.scribe.oauth.OAuthService;
  */
 public abstract class OAuthServiceDeractor implements OAuthService{
 
-    private final OAuthService oAuthService;
-    private final String oAuthType;
-    private final String authorizationUrl;
+    private OAuthService oAuthService;
+    private String oAuthType;
+    private String authorizationUrl;
 
 
     public OAuthServiceDeractor(OAuthService oAuthService, String type) {
@@ -26,26 +26,30 @@ public abstract class OAuthServiceDeractor implements OAuthService{
 
     @Override
     public Token getRequestToken() {
-        return null;
+        return oAuthService.getRequestToken();
     }
 
     @Override
     public Token getAccessToken(Token token, Verifier verifier) {
-        return null;
+        return oAuthService.getAccessToken(token,verifier);
     }
 
     @Override
     public void signRequest(Token token, OAuthRequest oAuthRequest) {
-
+        oAuthService.signRequest(token,oAuthRequest);
     }
 
     @Override
     public String getVersion() {
-        return null;
+        return oAuthService.getVersion();
     }
 
     @Override
-    public String getAuthorizationUrl(Token token) {
+    public String getAuthorizationUrl(Token requestToken) {
+        return oAuthService.getAuthorizationUrl(requestToken);
+    }
+
+    public String getAuthorizationUrl() {
         return authorizationUrl;
     }
 

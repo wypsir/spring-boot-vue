@@ -76,14 +76,14 @@
             <!--using-->
             <!--th:text="${a.authorizationUrl}"-->
             <!--Google+</a>-->
-            <a th:each="a:${oAuthServices}" href="#"
+            <a th:each="a:${oAuthServices}" th:href="${a.authorizationUrl}"
                class="btn btn-block btn-social btn-github btn-flat">
                 <i class="fa fa-google-plus"></i> <span th:text="${'Sign in  using '+a.oAuthType}"></span></a>
         </div>
         <!-- /.social-auth-links -->
 
         <a href="#">I forgot my password</a><br/>
-        <a href="/register.html" class="text-center">Register a new membership</a>
+        <a href="/register" class="text-center">Register a new membership</a>
 
     </div>
     <!-- /.login-box-body -->

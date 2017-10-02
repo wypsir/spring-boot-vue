@@ -37,7 +37,9 @@
     <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
 
-        <form action="/register.json" method="post" id="register-form">
+        <form th:action="${oauth==0?'/oauth/register':'/register'}" method="post" id="register-form">
+            <input type="hidden" name="oAuthType" th:value="${oAuthInfo.oAuthType}"></input>
+            <input type="hidden" name="oAuthId" th:value="${oAuthInfo.oAuthId}"></input>
             <div class="form-group has-feedback">
                 <input type="text" name="username" class="form-control" placeholder="username"/>
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
