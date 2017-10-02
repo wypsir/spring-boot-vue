@@ -5,16 +5,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.wyp.common.entity.BeautifulPictures;
 import com.wyp.common.entity.Picture;
 import com.wyp.common.util.SpringUtils;
-import com.wyp.shiro.config.ShiroConfig;
 import com.wyp.webserver.web.CrawlerUtil;
 import com.wyp.webserver.web.service.IBeautifulPicturesService;
 import com.wyp.webserver.web.service.IPictureService;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.TypeExcludeFilter;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,7 +20,7 @@ import java.util.Map;
 //@MapperScan("com.wyp.dao.mapper*")
 @ComponentScan(value = "com.wyp"
 //        ,excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = ShiroConfig.class)}
-        )
+)
 @SpringBootApplication
 public class SpringBootVueApplication
 //        implements CommandLineRunner
