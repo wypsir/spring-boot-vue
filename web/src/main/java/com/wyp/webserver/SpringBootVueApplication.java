@@ -10,6 +10,7 @@ import com.wyp.webserver.web.service.IBeautifulPicturesService;
 import com.wyp.webserver.web.service.IPictureService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.util.Collection;
@@ -22,6 +23,7 @@ import java.util.Map;
 //        ,excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = ShiroConfig.class)}
 )
 @SpringBootApplication
+@ServletComponentScan
 public class SpringBootVueApplication
 //        implements CommandLineRunner
 {
