@@ -3,19 +3,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>springbootvue</groupId>
-    <artifactId>spring-boot-vue</artifactId>
+    <groupId>com.yaping</groupId>
+    <artifactId>wang</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <modules>
-        <module>dao</module>
-        <module>server</module>
-        <module>web</module>
-        <module>common</module>
-        <module>shiro</module>
+        <module>wang-dao</module>
+        <module>wang-server</module>
+        <module>wang-web</module>
+        <module>wang-common</module>
+        <module>wang-shiro</module>
     </modules>
     <packaging>pom</packaging>
 
-    <name>spring-boot-vue</name>
+    <name>wang-ping</name>
     <description>Demo project for Spring Boot</description>
 
     <parent>
