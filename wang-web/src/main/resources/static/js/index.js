@@ -91,74 +91,79 @@ $(function () {
         // });
 
 
-        layui.use('table', function(){
+        layui.use('table', function () {
             var table = layui.table;
 
             //方法级渲染
             table.render({
                 elem: '#LAY_table_user'
-                ,url: '/pictures1'
-                ,request:{pageName:'current',limitName:'size'}
-                ,cols: [[
+                , url: '/pictures1'
+                , request: {pageName: 'current', limitName: 'size'}
+                , response: {statusCode: 200}
+                , cols: [[
                     {checkbox: true}
-                    ,{field:'id', title: 'ID', width:360, sort: true}
-                    ,{field:'picturesId', title: '用户名', width:170}
-                    ,{field:'url', title: '性别', width:500, sort: true}
+                    , {field: 'id', title: 'ID', width: 360, sort: true}
+                    , {field: 'picturesId', title: '图片ID', width: 170}
+                    , {field: 'url', title: 'URL', width: 500,templet:'#picturesImg'}
+                    , {field: 'op', title: '操作', width: 200, templet: '#op'}
                 ]]
-                ,id: 'testReload'
-                ,page: true
-                // ,height: 315
+                , id: 'testReload'
+                , page: true
+                ,height: 600
             });
 
             var $ = layui.$, active = {
-                reload: function(){
+                reload: function () {
                     var demoReload = $('#demoReload');
-
                     table.reload('testReload', {
                         where: {
-                            key: {
+                            'condition': {
                                 id: demoReload.val()
                             }
                         }
                     });
                 }
+                , getCheckData: function () {
+                    var  checkStatus=table.checkStatus('testReload'),
+                        data=checkStatus.data;
+                    layer.alert(JSON.stringify(data))
+                }
+                , getCheckLength: function () {
+                    var  checkStatus=table.checkStatus('testReload'),
+                        data=checkStatus.data;
+                    layer.msg("选中了: " + data.length + ' 个')
+                },
+                isAll: function () {
+                    var  checkStatus=table.checkStatus('testReload');
+                    layer.msg(checkStatus.isAll?"全选":"未全选")
+                }
             };
 
-            $('.demoTable .layui-btn').on('click', function(){
+            table.on('checkbox(user)', function (obj) {
+                console.info(obj)
+            })
+
+            table.on('tool(user)', function (obj) {
+                console.info(obj)
+                var data = obj.data;
+                if (obj.event === 'detail') {
+                    layer.msg('ID:' + data.id + "的查看操作")
+                } else if (obj.event === 'del') {
+                    layer.confirm('真的删除这一条数据吗', function (index) {
+                        obj.del();
+                        layer.close(index);
+                    })
+                } else if (obj.event === 'edit') {
+                    layer.alert("编辑行:<br/>" + JSON.stringify(data))
+                }
+            })
+
+
+            $('.demoTable .layui-btn').on('click', function () {
                 var type = $(this).data('type');
                 active[type] ? active[type].call(this) : '';
             });
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     })

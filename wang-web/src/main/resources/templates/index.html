@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>AdminLTE 2 | Dashboard</title>
-    <link rel="stylesheet" href="../plugins/layui/css/layui.css" />
+    <link rel="stylesheet" href="../plugins/layui/css/layui.css"/>
     <script src="../js/index.js"></script>
 </head>
 
@@ -27,32 +27,41 @@
     <section class="content">
         <!-- Small boxes (Stat box) -->
 
-        <table class="layui-hide" id="LAY_table_user" lay-filter="user"></table>
+        <!--<table class="layui-hide" id="LAY_table_user" lay-filter="user"></table>-->
 
-        <!--<div class="row">-->
-            <!--<div class="col-xs-12">-->
-                <!--<div class="box">-->
-                    <!--<div class="box-header hide">-->
-                        <!--<h3 class="box-title">调度列表</h3>-->
-                    <!--</div>-->
-                    <!--<div class="box-body" >-->
-                        <!--&lt;!&ndash;<table id="job_list" class="table table-bordered table-striped">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<thead>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<th name="id" >id</th>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<th name="picturesId" >picturesId</th>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<th name="url" >url</th>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<th>操作</th>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</thead>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<tbody></tbody>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<tfoot></tfoot>&ndash;&gt;-->
-                        <!--&lt;!&ndash;</table>&ndash;&gt;-->
-                        <!--<table class="layui-hide" id="LAY_table_user" lay-filter="user"></table>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header hide">
+                        <h3 class="box-title">调度列表</h3>
+                    </div>
+                    <div class="box-body">
+
+                        <!--<div class="layui-btn-group demoTable">-->
+                            <!--<button class="layui-btn" data-type="getCheckData">获取选中行数据</button>-->
+                            <!--<button class="layui-btn" data-type="getCheckLength">获取选中数目</button>-->
+                            <!--<button class="layui-btn" data-type="isAll">验证是否全选</button>-->
+                        <!--</div>-->
+                        <div class="demoTable">
+                            搜索ID：
+                            <div class="layui-inline">
+                                <input class="layui-input" name="id" id="demoReload" autocomplete="off">
+                            </div>
+                            <button class="layui-btn" data-type="reload">搜索</button>
+                        </div>
+                        <table class="layui-hide" id="LAY_table_user" lay-filter="user"></table>
+                        <script type="text/html" id="op">
+                            <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">查看</a>
+                            <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+                        </script>
+                        <script type="text/html" id="picturesImg">
+                        <img src="{{d.url}}" />
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </section>
 </div>

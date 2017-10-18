@@ -1,4 +1,4 @@
-package com.yaping.common.config;
+package com.yaping.webserver.web.config;
 
 import com.baomidou.mybatisplus.MybatisConfiguration;
 import com.baomidou.mybatisplus.MybatisXMLLanguageDriver;
@@ -12,6 +12,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -34,6 +36,8 @@ import javax.sql.DataSource;
 @Configuration
 @MapperScan("com.yaping.dao.mapper*")
 public class MybatisPlusConfig {
+
+    private static final Logger logger = LoggerFactory.getLogger(MybatisPlusConfig.class);
 
     @Autowired
     private MybatisProperties properties;
@@ -103,7 +107,14 @@ public class MybatisPlusConfig {
         }
         if (!ObjectUtils.isEmpty(this.properties.resolveMapperLocations())) {
             factory.setMapperLocations(this.properties.resolveMapperLocations());
+        } else {
+            logger.info("===================================");
+            logger.info("Mybatis *Mapper.xml not loading...");
+            logger.info("===================================");
         }
+        factory.setPlugins(new Interceptor[]{
+                paginationInterceptor()
+        });
         return factory.getObject();
     }
 

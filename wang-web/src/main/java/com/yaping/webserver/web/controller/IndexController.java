@@ -1,7 +1,6 @@
 package com.yaping.webserver.web.controller;
 
-import com.baomidou.mybatisplus.mapper.Condition;
-import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.yaping.common.entity.Picture;
 import com.yaping.common.entity.Result;
@@ -36,10 +35,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 //import org.apache.shiro.SecurityUtils;
 //import org.apache.shiro.authc.AuthenticationException;
@@ -186,26 +182,24 @@ public class IndexController {
         pictureDataTablesOutput.setRecordsFiltered(Long.valueOf(page.getTotal()));
         pictureDataTablesOutput.setData(page.getRecords());
         HashMap<Object, Object> maps = new HashMap<>();
-        maps.put("draw",draw);
-        maps.put("recordsTotal",page.getTotal());
-        maps.put("recordsFiltered",page.getTotal());
-        maps.put("data",page.getRecords());
+        maps.put("draw", draw);
+        maps.put("recordsTotal", page.getTotal());
+        maps.put("recordsFiltered", page.getTotal());
+        maps.put("data", page.getRecords());
         return maps;
     }
 
     @RequestMapping("/pictures1")
     @ResponseBody
-    public Result pictures1(Page<Picture> page,HttpServletRequest request) {
+    public Result pictures1(Page<Picture> page, HttpServletRequest request) {
 
-        page = pictureService.selectPage(page, Condition.EMPTY);
-        Result<Object> result = new Result<>();
-        result.setCode(0);
-        result.setMsg("成功");
-        result.setCount(page.getTotal());
-        result.setData(page.getRecords());
-        return result;
+        Map<String, Object> condition = page.getCondition();
+//        List<Picture>  pictures=  pictureService.selectUserList(page, condition);
+//        page.setRecords(pictures);
+        page = pictureService.selectPage(page, new EntityWrapper());
+//        pictureService.selectUserList(page, 1020);
+        return Result.page(page);
     }
-
 
 
 }

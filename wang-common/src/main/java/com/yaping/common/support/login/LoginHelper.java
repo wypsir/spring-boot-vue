@@ -19,7 +19,7 @@ public class LoginHelper {
 //        LifecycleBeanPostProcessor bean = SpringUtils.getBean(LifecycleBeanPostProcessor.class);
 //        if (Objects.nonNull(bean)) {
             UsernamePasswordToken token = new UsernamePasswordToken(account, password, host);
-            token.setRememberMe(true);
+//            token.setRememberMe(true);
             Subject subject = SecurityUtils.getSubject();
             try {
                 subject.login(token);

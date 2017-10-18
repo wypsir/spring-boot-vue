@@ -9,4 +9,13 @@
 		<result column="url" property="url" />
 	</resultMap>
 
+	<select id="selectUserList" resultType="com.yaping.common.entity.Picture">
+		select * from picture
+		<where>
+			<if test="picturesId != null and picturesId !='' ">
+				and pictures_id = ${picturesId}
+			</if>
+		</where>
+	</select>
+
 </mapper>
