@@ -44,10 +44,12 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/dist/**", "anon");
         filterChainDefinitionMap.put("/bower_components/**", "anon");
         filterChainDefinitionMap.put("/plugins/**", "anon");
+        filterChainDefinitionMap.put("/js/**", "anon");
 
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/register", "anon");
         filterChainDefinitionMap.put("/oauth/**", "anon");
+        filterChainDefinitionMap.put("/adminlte/**", "anon");
 
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "logout");
@@ -59,7 +61,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/**", "authc");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-        Log.info("Shiro拦截器工厂类注入成功");
+        Log.info("Shiro interceptor factory class injected success");
         return shiroFilterFactoryBean;
     }
 

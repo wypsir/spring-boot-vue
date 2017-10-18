@@ -1,21 +1,24 @@
-<!--<!DOCTYPE html>-->
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>AdminLTE 2 | Log in</title>
+
     <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
-    <!-- Bootstrap 3.3.7 -->
-    <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="../adminlte/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.min.css"/>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="../plugins/font-awesome-4.5.0/css/font-awesome.min.css">
     <!-- Ionicons -->
-    <link rel="stylesheet" type="text/css" href="../bower_components/Ionicons/css/ionicons.min.css"/>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"> -->
+    <link rel="stylesheet" href="../plugins/ionicons-2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" type="text/css" href="../dist/css/AdminLTE.min.css"/>
-    <!-- iCheck -->
-    <link rel="stylesheet" type="text/css" href="../plugins/iCheck/square/blue.css"/>
+    <link rel="stylesheet" href="../adminlte/dist/css/AdminLTE-local.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="../adminlte/dist/css/skins/_all-skins.min.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -24,9 +27,30 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <!-- Google Font -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"/>
+    <!-- pace -->
+    <link rel="stylesheet" href="../plugins/pace/themes/pace-theme-flash.css">
+    <!-- jQuery 2.1.4 -->
+    <script src="../adminlte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="../adminlte/bootstrap/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../adminlte/plugins/fastclick/fastclick.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../adminlte/dist/js/app.min.js"></script>
+    <!-- jquery.slimscroll -->
+    <script src="../adminlte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+
+    <!-- pace -->
+    <script src="../plugins/pace/pace.min.js"></script>
+    <!-- jquery cookie -->
+    <script src="../plugins/jquery/jquery.cookie.js"></script>
+
+    <!-- layer -->
+    <script src="../plugins/layui/layui.js"></script>
+
+    <link rel="stylesheet" href="../adminlte/plugins/iCheck/square/blue.css">
+
+
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -39,7 +63,7 @@
 
         <form action="/login" method="post" id="login-form">
             <div class="form-group has-feedback">
-                <input type="text" name="username" class="form-control" placeholder="Email"/>
+                <input type="text" name="nickname" class="form-control" placeholder="nickname"/>
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
@@ -61,7 +85,7 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-xs-4">
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    <button type="submit" id="sign" class="btn btn-primary btn-block btn-flat">Sign In</button>
                 </div>
                 <!-- /.col -->
             </div>
@@ -89,46 +113,9 @@
     <!-- /.login-box-body -->
 </div>
 <!-- /.login-box -->
-
-<!-- jQuery 3 -->
-<script src="../bower_components/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="../bower_components/bootstrap-validator/bootstrapValidator.min.js"></script>
-<!-- iCheck -->
-<script src="../plugins/iCheck/icheck.min.js"></script>
-<script>
-    $(function () {
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue',
-            increaseArea: '20%' // optional
-        });
-
-        $("#login-form").bootstrapValidator({
-            message: "请输入用户名/密码",
-            submitHandler: function (validator, loginForm, submitButton) {
-                validator.defaultSubmit();
-            },
-            fields: {
-                username: {
-                    validators: {
-                        notEmpty: {
-                            message: "登录邮箱名或用户名不能为空"
-                        }
-                    }
-                },
-                password: {
-                    validators: {
-                        notEmpty: {
-                            message: "密码不能为空"
-                        }
-                    }
-                }
-            }
-
-        });
-    });
-</script>
+<script src="../plugins/jquery/jquery.validate.min.js"></script>
+<script src="../adminlte/plugins/iCheck/icheck.min.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/sign.js"></script>
 </body>
 </html>

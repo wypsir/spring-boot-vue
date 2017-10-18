@@ -1,7 +1,7 @@
 package com.yaping.webserver.web.service;
 
 import com.baomidou.mybatisplus.service.IService;
-import com.yaping.common.entity.oauth.OAuthUser;
+import com.yaping.common.support.oauth.OAuthUser;
 
 /**
  * <p>

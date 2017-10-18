@@ -10,4 +10,6 @@ public class OAuthTypes {
 
     public static final String QQ="qq";
 
+    public static final String SAIN_WEI_BO="sainweibo";
+
 }

@@ -3,7 +3,7 @@
 <mapper namespace="com.yaping.dao.mapper.OAuthUserMapper">
 
 	<!-- 通用查询映射结果 -->
-	<resultMap id="BaseResultMap" type="com.yaping.common.entity.oauth.OAuthUser">
+	<resultMap id="BaseResultMap" type="com.yaping.common.support.oauth.OAuthUser">
 		<id column="id" property="id" />
 		<result column="oAuth_type" property="oAuthType" />
 		<result column="oAuth_id" property="oAuthId" />

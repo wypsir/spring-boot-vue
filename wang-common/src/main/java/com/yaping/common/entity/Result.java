@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yaping.common.enums.ResultCode;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Result<T> implements Serializable {
 
@@ -17,7 +18,9 @@ public class Result<T> implements Serializable {
 	private static final int SUCCESS_CODE = 200;
 	private static final int ERROR_CODE = 400;
 
-	private T t;
+	private T data;
+
+	private int count;
 
 	public int getCode() {
 		return code;
@@ -35,12 +38,12 @@ public class Result<T> implements Serializable {
 		this.msg = msg;
 	}
 
-	public T getT() {
-		return t;
+	public T getData() {
+		return data;
 	}
 
-	public void setT(T t) {
-		this.t = t;
+	public void setData(T t) {
+		this.data = t;
 	}
 
 	public Result() {
@@ -48,7 +51,7 @@ public class Result<T> implements Serializable {
 
 	public Result(T t) {
 		this.code = 200;
-		this.t = t;
+		this.data = t;
 	}
 
 	public Result(Integer code, String msg) {
@@ -56,10 +59,10 @@ public class Result<T> implements Serializable {
 		this.msg = msg;
 	}
 
-	public Result(Integer code, String msg, T t) {
+	public Result(Integer code, String msg, T data) {
 		this.code = code;
 		this.msg = msg;
-		this.t = t;
+		this.data = data;
 	}
 
 
@@ -146,4 +149,11 @@ public class Result<T> implements Serializable {
 	}
 
 
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
 }

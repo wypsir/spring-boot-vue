@@ -130,6 +130,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <fork>true</fork>
                     <mainClass>com.yaping.webserver.SpringBootAWebApplication</mainClass>
                     <jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>
                 </configuration>
@@ -140,6 +141,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-loader-tools</artifactId>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

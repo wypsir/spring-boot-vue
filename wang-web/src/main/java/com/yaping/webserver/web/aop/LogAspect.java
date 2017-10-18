@@ -45,14 +45,14 @@ public class LogAspect {
 
     private String PACKAGES_ENTITY_PREFIX = "com.lottery.gamble";
 
-    @Pointcut("execution(* com.wyp.webserver.web.controller.*.*(..))")
+    @Pointcut("execution(* com.yaping.webserver.web.controller.*.*(..))")
     private void pcMethod() {
     }
 
 
     @Before(value = "pcMethod()")
     public void controllerBefore(JoinPoint point) {
-        logger.info("controllerBefore ...");
+//        logger.info("controllerBefore ...");
         HttpLog log = new HttpLog();
         String sessionId = request.getRequestedSessionId();
         String url = request.getRequestURI();
@@ -71,19 +71,19 @@ public class LogAspect {
 
     @After(value = "pcMethod()")
     public void controllerAfter(JoinPoint point) {
-        logger.info("controllerAfter ...");
+//        logger.info("controllerAfter ...");
 
     }
 
     @Around("pcMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        logger.info("controllerAround ...");
+//        logger.info("controllerAround ...");
         return  point.proceed();
     }
 
     @AfterReturning(pointcut = "pcMethod()",returning = "relVal")
     public void AfterReturning (JoinPoint point,Object relVal) {
-        logger.info("AfterReturning ...");
+//        logger.info("AfterReturning ...");
         int status = response.getStatus();
 
         long time = System.currentTimeMillis();

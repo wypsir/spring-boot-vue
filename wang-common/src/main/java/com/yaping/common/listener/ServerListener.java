@@ -20,7 +20,7 @@ public class ServerListener implements ApplicationListener<ApplicationReadyEvent
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         logger.info("------------------------------------");
-        logger.info("系统【{}】启动完成！", event.getSpringApplication().getSources().iterator().next());
+        logger.info("System【{}】start Finish！", event.getSpringApplication().getSources().iterator().next());
         logger.info("------------------------------------");
     }
 }

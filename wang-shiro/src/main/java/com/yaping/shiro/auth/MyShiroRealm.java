@@ -4,14 +4,17 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.IService;
+import com.yaping.common.core.BaseConstants;
 import com.yaping.common.entity.user.SysUser;
 import com.yaping.common.util.Log;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import javax.annotation.Resource;
@@ -52,6 +55,8 @@ public class MyShiroRealm extends AuthorizingRealm {
 //                ByteSource.Util.bytes(username + userInfo.getCreateTime()),//salt=username+salt
                 getName()  //realm name
         );
+        Session session = SecurityUtils.getSubject().getSession();
+        session.setAttribute(BaseConstants.CURRENT_USER,userInfo);
         return authenticationInfo;
     }
 }

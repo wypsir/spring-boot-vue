@@ -65,9 +65,9 @@ public class MpGenerator {
         // strategy.setSuperEntityColumns(new String[] { "test_id", "age" });
         // 自定义 com.wyp.dao.mapper 父类
         // strategy.setSuperMapperClass("com.baomidou.demo.TestMapper");
-        // 自定义 service 父类
+        // 自定义 ServiceImpl 父类
         // strategy.setSuperServiceClass("com.baomidou.demo.TestService");
-        // 自定义 service 实现类父类
+        // 自定义 ServiceImpl 实现类父类
         // strategy.setSuperServiceImplClass("com.baomidou.demo.TestServiceImpl");
         // 自定义 controller 父类
         // strategy.setSuperControllerClass("com.baomidou.demo.TestController");

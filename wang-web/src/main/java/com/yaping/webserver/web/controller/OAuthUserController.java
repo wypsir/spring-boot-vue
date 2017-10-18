@@ -2,12 +2,13 @@ package com.yaping.webserver.web.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.yaping.common.entity.oauth.OAuthUser;
+import com.yaping.common.support.oauth.OAuthUser;
 import com.yaping.common.entity.user.SysUser;
-import com.yaping.common.service.OAuthServiceDeractor;
-import com.yaping.common.service.OAuthServices;
+import com.yaping.common.support.oauth.OAuthServiceDeractor;
+import com.yaping.common.support.oauth.OAuthServices;
 import com.yaping.webserver.web.service.IOAuthUserService;
 import com.yaping.webserver.web.service.ISysUserService;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.scribe.model.Token;
 import org.scribe.model.Verifier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 /**
  * <p>
@@ -66,14 +68,16 @@ public class OAuthUserController {
         OAuthUser oAuthInfo = new OAuthUser();
         oAuthInfo.setoAuthId(oAuthId);
         oAuthInfo.setoAuthType(oAuthType);
-        String username = request.getParameter("username");
-        Wrapper<SysUser> where = new EntityWrapper<SysUser>().where("nickname={0}", username);
+        Wrapper<SysUser> where = new EntityWrapper<SysUser>().where("nickname={0}", user.getNickname());
 
         if (userService.selectOne(where) != null) {
             model.addAttribute("errorMessage", "用户名已存在");
             model.addAttribute("oAuthInfo", oAuthInfo);
             return "register";
         }
+        String password = new SimpleHash("md5", user.getPswd(), null, 2).toHex();
+        user.setPswd(password);
+        user.setCreateTime(new Date());
         userService.insert(user);
         Wrapper<OAuthUser> where1 = new EntityWrapper<OAuthUser>().where("oAuth_type={0}", oAuthInfo.getoAuthType()).and("oAuth_id=" + oAuthInfo.getoAuthId());
         OAuthUser oAuthUser = authUserService.selectOne(where1);

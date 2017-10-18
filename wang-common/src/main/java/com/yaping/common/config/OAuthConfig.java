@@ -1,9 +1,9 @@
 package com.yaping.common.config;
 
-import com.yaping.common.api.GithubApi;
+import com.yaping.common.support.oauth.api.GithubApi;
 import com.yaping.common.enums.OAuthTypes;
-import com.yaping.common.service.GithubOAuthService;
-import com.yaping.common.service.OAuthServiceDeractor;
+import com.yaping.common.support.oauth.service.GithubOAuthService;
+import com.yaping.common.support.oauth.OAuthServiceDeractor;
 import org.scribe.builder.ServiceBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

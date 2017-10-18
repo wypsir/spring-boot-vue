@@ -1,7 +1,7 @@
 package com.yaping.webserver.web.service.impl;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.yaping.common.entity.oauth.OAuthUser;
+import com.yaping.common.support.oauth.OAuthUser;
 import com.yaping.dao.mapper.OAuthUserMapper;
 import com.yaping.webserver.web.service.IOAuthUserService;
 import org.springframework.stereotype.Service;

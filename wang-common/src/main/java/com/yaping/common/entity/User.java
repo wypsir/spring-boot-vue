@@ -21,7 +21,7 @@ public class User implements Serializable {
 
     private Long id;
     @NotBlank(groups = {Valid.Login.class, Valid.Register.class})
-    private String username;
+    private String nickname;
     @NotBlank(groups = {Valid.Login.class, Valid.Register.class})
     private String password;
     @NotBlank(groups = {Valid.Register.class})

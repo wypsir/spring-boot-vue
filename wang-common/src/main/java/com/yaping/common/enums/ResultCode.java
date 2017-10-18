@@ -7,9 +7,10 @@ package com.yaping.common.enums;
  */
 public enum ResultCode {
     OK(200, "成功"),
+    BAD_REQUEST(400, "请求参数错误"),
     FAIL(404, "失败"),
-    ERROR(500, "服务器异常!"),
-    SERVER_INTERNAL_ERROR(20000, "服务器内部错误！"),;
+    ERROR(20000, "服务异常!"),
+    SERVER_INTERNAL_ERROR(500, "服务器内部错误！"),;
     private int code;
     private String desc;
 

@@ -2,7 +2,7 @@ package com.yaping.dao.mapper;
 
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.yaping.common.entity.oauth.OAuthUser;
+import com.yaping.common.support.oauth.OAuthUser;
 
 /**
  * <p>

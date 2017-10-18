@@ -1,26 +1,31 @@
 package com.yaping.webserver.web.controller;
 
+import com.baomidou.mybatisplus.mapper.Condition;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.yaping.common.entity.Picture;
 import com.yaping.common.entity.Result;
 import com.yaping.common.entity.User;
 import com.yaping.common.entity.user.SysUser;
-import com.yaping.common.service.OAuthServiceDeractor;
-import com.yaping.common.service.OAuthServices;
+import com.yaping.common.exception.BaseException;
+import com.yaping.common.exception.LoginException;
+import com.yaping.common.support.login.LoginHelper;
+import com.yaping.common.support.oauth.OAuthServiceDeractor;
+import com.yaping.common.support.oauth.OAuthServices;
 import com.yaping.common.util.ErrorUtil;
+import com.yaping.common.util.IPUtil;
 import com.yaping.common.util.Log;
-import com.yaping.common.util.SpringUtils;
 import com.yaping.common.valid.Valid;
 import com.yaping.webserver.web.service.IPictureService;
 import com.yaping.webserver.web.service.ISysUserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.SimpleHash;
-import org.springframework.beans.BeansException;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
+import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +35,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -78,35 +85,33 @@ public class IndexController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String toLogin(Model model) {
         List<OAuthServiceDeractor> allOAuthServices = oAuthServices.getAllOAuthServices();
-        model.addAttribute("oAuthServices",allOAuthServices);
+        model.addAttribute("oAuthServices", allOAuthServices);
         return "login";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@Validated(Valid.Login.class) User user, Model model) {
-        try {
-            Object shiroConfig = null;
-            try {
-                shiroConfig = SpringUtils.getBean("shiroConfig");
-            } catch (BeansException e) {
-            }
+    @ResponseBody
+    public Result login(@Validated(Valid.Login.class) User user, BindingResult result, Model model, HttpServletRequest request) {
 
-            if (Objects.nonNull(shiroConfig)) {
-                UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
-                SecurityUtils.getSubject().login(token);
-            } else {
-
-            }
-
-            return "index";
-        } catch (AuthenticationException e) {
-            Log.error("login error:{}", ErrorUtil.writer(e));
+        if (result.hasErrors()) {
+            FieldError fieldError = result.getFieldError();
+            return Result.failure(fieldError);
         }
-        model.addAttribute("message", "用户名/密码错误！");
-        return "login";
+        try {
+            if (LoginHelper.login(user.getNickname(), user.getPassword(), IPUtil.getClientIp(request))) {
+
+                return Result.success();
+            }
+        } catch (Exception e) {
+            if (e instanceof BaseException) {
+                ((LoginException) e).handler(Result.failure());
+            }
+            return Result.serverInternalError();
+        }
+        return Result.failure();
     }
 
-    @RequestMapping(value = "/index")
+    @RequestMapping(value = {"/", "/index"})
     public String index() {
         return "index";
     }
@@ -127,7 +132,7 @@ public class IndexController {
         boolean insert = false;
         try {
             SysUser sysUser = new SysUser();
-            sysUser.setNickname(user.getUsername());
+            sysUser.setNickname(user.getNickname());
             sysUser.setEmail(user.getEmail());
             String password = new SimpleHash("md5", user.getPassword(), null, 2).toHex();
 
@@ -148,10 +153,14 @@ public class IndexController {
         return "login";
     }
 
-    @RequestMapping(value = "/test")
-    public void test() {
-        int i = 0 / 0;
-
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @ResponseBody
+    public Result logout() {
+        Subject subject = SecurityUtils.getSubject();
+        if (Objects.nonNull(subject) && subject.isAuthenticated()) {
+            subject.logout();
+        }
+        return Result.success();
     }
 
 
@@ -163,11 +172,40 @@ public class IndexController {
 
     @RequestMapping("/pictures")
     @ResponseBody
-    public Page p(Page<Picture> page) {
+    public Object p(Page<Picture> page, DataTablesInput input,
+                    @RequestParam(required = false, defaultValue = "0") int draw,
+                    @RequestParam(required = false, defaultValue = "0") int start,
+                    @RequestParam(required = false, defaultValue = "10") int length) {
+        if (start > 0) {
+            page.setCurrent((start - length) + 1);
+        }
         page = pictureService.selectPage(page);
-
-        return page;
+        DataTablesOutput<Picture> pictureDataTablesOutput = new DataTablesOutput<>();
+        pictureDataTablesOutput.setDraw(draw);
+        pictureDataTablesOutput.setRecordsTotal(Long.valueOf(page.getTotal()));
+        pictureDataTablesOutput.setRecordsFiltered(Long.valueOf(page.getTotal()));
+        pictureDataTablesOutput.setData(page.getRecords());
+        HashMap<Object, Object> maps = new HashMap<>();
+        maps.put("draw",draw);
+        maps.put("recordsTotal",page.getTotal());
+        maps.put("recordsFiltered",page.getTotal());
+        maps.put("data",page.getRecords());
+        return maps;
     }
+
+    @RequestMapping("/pictures1")
+    @ResponseBody
+    public Result pictures1(Page<Picture> page,HttpServletRequest request) {
+
+        page = pictureService.selectPage(page, Condition.EMPTY);
+        Result<Object> result = new Result<>();
+        result.setCode(0);
+        result.setMsg("成功");
+        result.setCount(page.getTotal());
+        result.setData(page.getRecords());
+        return result;
+    }
+
 
 
 }
