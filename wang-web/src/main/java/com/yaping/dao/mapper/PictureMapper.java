@@ -1,5 +1,6 @@
 package com.yaping.dao.mapper;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.yaping.common.entity.Picture;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
@@ -20,5 +21,5 @@ public interface PictureMapper extends BaseMapper<Picture> {
 
 
     @Select("selectUserList")
-    List<Picture> selectUserList(Pagination  page,@Param("picturesId") Integer picturesId);
+    List<Picture> selectUserList(Pagination  page,@Param("ew") Wrapper<Picture> wrapper);
 }

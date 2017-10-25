@@ -118,7 +118,8 @@ $(function () {
                     table.reload('testReload', {
                         where: {
                             'condition': {
-                                id: demoReload.val()
+                                // id: demoReload.val(),
+                                pictures_Id: demoReload.val()
                             }
                         }
                     });

@@ -10,12 +10,13 @@
 	</resultMap>
 
 	<select id="selectUserList" resultType="com.yaping.common.entity.Picture">
-		select * from picture
-		<where>
-			<if test="picturesId != null and picturesId !='' ">
-				and pictures_id = ${picturesId}
-			</if>
-		</where>
+		select p.id,p.pictures_id,p.url from picture p LEFT JOIN beautiful_pictures bp on p.pictures_id = bp.id
+		${ew.sqlSegment}
+		<!--<where>-->
+			<!--<if test="cm.pictures_Id != null and cm.pictures_Id !='' ">-->
+				<!--and pictures_id = ${cm.pictures_Id}-->
+			<!--</if>-->
+		<!--</where>-->
 	</select>
 
 </mapper>

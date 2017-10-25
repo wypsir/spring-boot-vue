@@ -1,5 +1,6 @@
 package com.yaping.webserver.web.service.impl;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.yaping.common.entity.Picture;
@@ -25,7 +26,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture> impl
     private PictureMapper pictureBaseMapper;
 
     @Override
-    public List<Picture> selectUserList(Pagination page, Integer picturesId) {
-       return pictureBaseMapper.selectUserList(page,new Integer(picturesId));
+    public List<Picture> selectUserList(Pagination page, Wrapper wrapper) {
+       return pictureBaseMapper.selectUserList(page,wrapper);
     }
 }

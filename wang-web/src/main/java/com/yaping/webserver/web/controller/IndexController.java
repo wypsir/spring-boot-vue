@@ -1,6 +1,7 @@
 package com.yaping.webserver.web.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.SqlHelper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.yaping.common.entity.Picture;
 import com.yaping.common.entity.Result;
@@ -197,7 +198,10 @@ public class IndexController {
 //        List<Picture>  pictures=  pictureService.selectUserList(page, condition);
 //        page.setRecords(pictures);
         page = pictureService.selectPage(page, new EntityWrapper());
-//        pictureService.selectUserList(page, 1020);
+        EntityWrapper entityWrapper = new EntityWrapper();
+        SqlHelper.fillWrapper(page,entityWrapper);
+        List<Picture> list =  pictureService.selectUserList(page, entityWrapper);
+        page.setRecords(list);
         return Result.page(page);
     }
 

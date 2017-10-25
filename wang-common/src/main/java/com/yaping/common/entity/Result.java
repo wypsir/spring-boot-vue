@@ -174,6 +174,6 @@ public class Result<T> implements Serializable {
         if (total > 0) {
             return success(page);
         }
-        return Result.failure();
+        return Result.success();
     }
 }
