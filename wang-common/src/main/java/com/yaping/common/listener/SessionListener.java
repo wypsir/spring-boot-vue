@@ -35,7 +35,7 @@ public class SessionListener implements HttpSessionListener {
 //        session.setAttribute();
 
         logger.info("创建了一个Session连接:[" + session.getId() + "]");
-        redisTemplate.opsForSet().add(AllUSER_NUMBER,session.getId());
+//        redisTemplate.opsForSet().add(AllUSER_NUMBER,session.getId());
     }
 
     @Override
@@ -44,7 +44,7 @@ public class SessionListener implements HttpSessionListener {
         if (getAllUserNumber() > 0) {
             logger.info("销毁了一个Session连接:[" + session.getId() + "]");
         }
-        redisTemplate.opsForSet().remove(AllUSER_NUMBER, session.getId());
+//        redisTemplate.opsForSet().remove(AllUSER_NUMBER, session.getId());
     }
 
     public Integer getAllUserNumber() {
